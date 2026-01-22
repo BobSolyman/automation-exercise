@@ -52,17 +52,19 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.x"
 
       - name: Install dependencies
-        run: pip install coverage
+        run: |
+          pip install coverage
 
-      - name: Download coverage artifact
+      - name: Download coverage data
         uses: actions/download-artifact@v4
         with:
           name: coverage-data
@@ -73,7 +75,7 @@ jobs:
       - name: Generate coverage XML
         run: coverage xml
 
-      - name: Upload coverage XML artifact
+      - name: Upload coverage XML
         uses: actions/upload-artifact@v4
         with:
           name: coverage-xml
