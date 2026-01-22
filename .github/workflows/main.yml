@@ -1,51 +1,54 @@
-name: CI
+name: SSE CI/CD
 
 on:
   push:
-    branches: [main]
 
 jobs:
   style_check:
     name: style_check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.x"
 
       - name: Install black
         run: pip install black
 
       - name: Check code style with black
-        run: black --check diffusion2d.py tests/
+        run: black --check .
 
   test:
     name: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.x"
 
       - name: Install dependencies
         run: |
           pip install pytest coverage numpy matplotlib
 
       - name: Run tests with coverage
-        run: coverage run -m pytest tests/
+        run: |
+          coverage run -m pytest
 
-      - name: Upload coverage artifact
+      - name: Upload coverage data
         uses: actions/upload-artifact@v4
         with:
           name: coverage-data
           path: .coverage
           retention-days: 1
+          include-hidden-files: true
 
   coverage_report:
     name: coverage_report
