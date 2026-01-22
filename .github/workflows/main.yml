@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   style_check:
@@ -10,15 +10,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
-      
+          python-version: "3.11"
+
       - name: Install black
         run: pip install black
-      
+
       - name: Check code style with black
         run: black --check diffusion2d.py tests/
 
@@ -27,21 +27,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
-      
+          python-version: "3.11"
+
       - name: Install dependencies
         run: |
           pip install pytest coverage numpy matplotlib
-      
+
       - name: Run tests with coverage
-        run: |
-          coverage run -m pytest tests/
-          coverage combine
-      
+        run: coverage run -m pytest tests/
+
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v4
         with:
@@ -55,26 +53,26 @@ jobs:
     needs: test
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
-      
+          python-version: "3.11"
+
       - name: Install dependencies
         run: pip install coverage
-      
+
       - name: Download coverage artifact
         uses: actions/download-artifact@v4
         with:
           name: coverage-data
-      
+
       - name: Generate coverage report
         run: coverage report
-      
+
       - name: Generate coverage XML
         run: coverage xml
-      
+
       - name: Upload coverage XML artifact
         uses: actions/upload-artifact@v4
         with:
